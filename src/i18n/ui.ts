@@ -1,0 +1,235 @@
+import type { Locale } from '../data/sources';
+
+export const LOCALES: Locale[] = ['es', 'en'];
+export const DEFAULT_LOCALE: Locale = 'es';
+
+export const ROUTES = {
+  home: { es: '/', en: '/en' },
+  legal: { es: '/aviso-legal', en: '/en/legal-notice' },
+  privacy: { es: '/privacidad', en: '/en/privacy' },
+} as const;
+export type RouteKey = keyof typeof ROUTES;
+
+const es = {
+  meta: {
+    title: 'Pablo Reina · Data engineer',
+    description: 'Junto los datos de tu empresa en un solo sitio, los dejo cuadrados y los convierto en decisiones. Data engineer freelance o en plantilla.',
+    lang: 'es-ES',
+  },
+  nav: { talk: 'Hablemos', skip: 'Saltar al contenido', lang: 'English', langLabel: 'Ver la web en inglés' },
+  chapters: ['inicio', 'caos', 'ingesta', 'modelo', 'decisión', 'persona'],
+  chaptersLabel: 'Capítulos',
+  story: [
+    { k: 'Data engineer · freelance o en plantilla', h: 'Datos limpios, decisiones rápidas.',
+      p: 'Soy Pablo Reina. Junto los datos de tu empresa en un solo sitio, los dejo cuadrados y los convierto en números que puedes usar cada mañana.' },
+    { k: '01 · el caos', h: 'Tus datos viven en 20 sitios.',
+      p: 'Un CRM, un ERP, tres Excel con el mismo nombre y unos anuncios que nadie cruza con las ventas. Cada informe cuenta una versión distinta.' },
+    { k: '02 · la ingesta', h: 'Los traigo a uno solo.',
+      p: 'Ingesta automática cada hora, con tests en cada paso. Si una fuente falla, me entero yo antes de que lo notes tú.' },
+    { k: '03 · el modelo', h: 'Ordenados, limpios y cuadrados.',
+      p: 'Un único modelo de datos. Ventas y finanzas por fin miran el mismo número y dejan de discutir cuál es el bueno.' },
+    { k: '04 · la decisión', h: 'Y se convierten en decisiones.',
+      p: 'Margen real por producto, coste de captación por canal, previsión frente a real. Cada mañana en tu correo, sin pedirlo.' },
+    { k: '05 · la persona', h: 'Detrás, una persona.',
+      p: 'Sin consultora de por medio. Hablas conmigo desde el primer día y sabes en todo momento qué estoy haciendo y por qué.' },
+  ],
+  heroCtaPrimary: 'Hablemos de tu proyecto',
+  heroCtaSecondary: 'Pruébalo',
+  scrollHint: 'Desliza para ver cómo trabajo',
+  writeMe: 'Escríbeme',
+  game: {
+    h: 'Ahora tú: junta tus datos.',
+    p: 'Pasa el ratón por las fuentes que caen y mira cómo acaban todas en una sola tabla, ordenadas y listas para cruzar.',
+    table: 'empresa.unificada',
+    waiting: 'esperando datos',
+    synced: 'sincronizado ahora',
+    cols: ['fuente', 'tipo', 'filas', 'estado'],
+    ok: 'ok',
+    emptyTitle: 'Tabla vacía.',
+    emptyText: 'Cada fuente que toques se ingesta aquí, normalizada y lista para cruzar con las demás.',
+    sources: 'fuentes',
+    rows: 'filas',
+    hintIdle: 'Pasa el ratón por las fuentes',
+    hintAuto: 'Demo automática · toca una para jugar tú',
+    hintUser: 'Acerca el ratón a las fuentes',
+    hintAfter: 'Ahora tú: atrapa el resto',
+    doneTitle: 'Las 20 fuentes, en una sola tabla.',
+    doneText: 'Aquí ha bastado con pasar el ratón. En tu empresa lo monto yo, con tests y alertas. ¿Cuáles usáis vosotros?',
+    doneCta: 'Marcar mi stack',
+    again: 'Volver a jugar',
+  },
+  picker: {
+    h: '¿Qué usa tu empresa de verdad?',
+    p: 'Marca tus herramientas y te enseño qué preguntas de negocio podrías responder cruzándolas.',
+    groupLabel: 'Herramientas que usa tu empresa',
+    insH: 'Lo que podrías responder',
+    tagCross: 'Cruzando fuentes',
+    tagSingle: 'Con una sola fuente',
+    tagNeeds: 'Necesita',
+    tagMissing: 'Te falta',
+    via: 'Con',
+    empty: 'Con esto todavía no hay mucho que cruzar. Marca algo más o cuéntamelo en el formulario.',
+    more: 'Ver {n} más a tu alcance',
+    less: 'Ver menos',
+    countNone: 'Marca tu stack para ver las tuyas · {total} en total',
+    count: '{on} preguntas a tu alcance · {rest} más si conectas otras fuentes',
+    stackNone: '<b>Tu stack:</b> marca arriba lo que usáis.',
+    stack: '<b>Tu stack:</b> {list}. Puedes responder {on} de {total} preguntas.',
+    cta: 'Quiero responder esto',
+    msgIntro: 'Hola Pablo. En la empresa usamos {list}.',
+    msgWant: ' Nos gustaría saber {list}.',
+    msgEnd: ' ¿Hablamos?',
+    and: 'y',
+  },
+  how: {
+    h: 'Cómo trabajo contigo.',
+    steps: [
+      { h: 'Diagnóstico', p: 'Una llamada y una semana para entender qué datos tienes, dónde están y por qué no cuadran.' },
+      { h: 'Arquitectura', p: 'Propuesta concreta con el coste mensual estimado antes de tocar nada. Sin sorpresas en la factura de cloud.' },
+      { h: 'Producción', p: 'Pipelines con tests, documentación y alertas desde el primer despliegue. Lo que entra, cuadra.' },
+      { h: 'Contigo o con tu equipo', p: 'Me quedo a mantenerlo como freelance, me incorporo en plantilla o lo dejo en manos de tu equipo, formado.' },
+    ],
+  },
+  contact: {
+    h: 'Hablemos.',
+    p: 'Cuéntame qué usáis y qué te gustaría ver. En 30 minutos te digo si tiene arreglo, cuánto tardaría y cuánto costaría.',
+    copy: 'Copiar',
+    copied: 'Email copiado',
+    email: 'Tu email',
+    emailPh: 'nombre@empresa.com',
+    msg: 'Mensaje',
+    msgPh: 'Usamos HubSpot y Holded y no sabemos qué margen nos deja cada producto…',
+    consent: 'He leído la <a href="{privacy}">política de privacidad</a> y acepto que uses estos datos para responderme.',
+    send: 'Enviar',
+    sending: 'Enviando…',
+    ok: 'Recibido. Te respondo en menos de 24 horas laborables.',
+    errEmail: 'Revisa el email: parece que le falta algo.',
+    errMsg: 'Escribe un mensaje, aunque sea corto.',
+    errConsent: 'Necesito que aceptes la política de privacidad para poder responderte.',
+    errServer: 'No se ha podido enviar. Escríbeme directamente a {email}.',
+  },
+  footer: { role: 'Pablo Reina · data engineer', legal: 'Aviso legal', privacy: 'Privacidad' },
+  upload: 'Subir foto (solo en desarrollo)',
+  notImage: 'Ese archivo no es una imagen',
+};
+
+export type Dict = typeof es;
+
+const en: Dict = {
+  meta: {
+    title: 'Pablo Reina · Data engineer',
+    description: 'I bring all your company data into one place, make it add up and turn it into decisions. Freelance or full-time data engineer.',
+    lang: 'en',
+  },
+  nav: { talk: "Let's talk", skip: 'Skip to content', lang: 'Español', langLabel: 'Ver la web en español' },
+  chapters: ['start', 'chaos', 'ingest', 'model', 'decision', 'person'],
+  chaptersLabel: 'Chapters',
+  story: [
+    { k: 'Data engineer · freelance or full-time', h: 'Clean data, fast decisions.',
+      p: "I'm Pablo Reina. I bring your company's data into one place, make it add up and turn it into numbers you can use every morning." },
+    { k: '01 · the chaos', h: 'Your data lives in 20 places.',
+      p: 'A CRM, an ERP, three Excel files with the same name and ads nobody matches against sales. Every report tells a different story.' },
+    { k: '02 · the ingestion', h: 'I bring it into one.',
+      p: 'Automated ingestion every hour, tested at every step. If a source breaks, I find out before you notice.' },
+    { k: '03 · the model', h: 'Ordered, clean and reconciled.',
+      p: 'One data model. Sales and finance finally look at the same number and stop arguing about which one is right.' },
+    { k: '04 · the decision', h: 'And it becomes decisions.',
+      p: 'Real margin per product, acquisition cost per channel, forecast against actuals. In your inbox every morning, without asking.' },
+    { k: '05 · the person', h: 'Behind it, a person.',
+      p: 'No agency in between. You talk to me from day one and always know what I am doing and why.' },
+  ],
+  heroCtaPrimary: "Let's talk about your project",
+  heroCtaSecondary: 'Try it',
+  scrollHint: 'Scroll to see how I work',
+  writeMe: 'Write to me',
+  game: {
+    h: 'Your turn: bring your data together.',
+    p: 'Hover over the falling sources and watch them all land in a single table, ordered and ready to combine.',
+    table: 'company.unified',
+    waiting: 'waiting for data',
+    synced: 'synced just now',
+    cols: ['source', 'type', 'rows', 'status'],
+    ok: 'ok',
+    emptyTitle: 'Empty table.',
+    emptyText: 'Every source you touch is ingested here, normalised and ready to combine with the rest.',
+    sources: 'sources',
+    rows: 'rows',
+    hintIdle: 'Hover over the sources',
+    hintAuto: 'Auto demo · touch one to play yourself',
+    hintUser: 'Move your cursor near the sources',
+    hintAfter: 'Your turn: catch the rest',
+    doneTitle: 'All 20 sources, in one table.',
+    doneText: 'Here all it took was a hover. In your company I build it, with tests and alerts. Which ones do you use?',
+    doneCta: 'Pick my stack',
+    again: 'Play again',
+  },
+  picker: {
+    h: 'What does your company really use?',
+    p: 'Pick your tools and I will show you which business questions you could answer by combining them.',
+    groupLabel: 'Tools your company uses',
+    insH: 'What you could answer',
+    tagCross: 'Combining sources',
+    tagSingle: 'From a single source',
+    tagNeeds: 'Needs',
+    tagMissing: 'Missing',
+    via: 'With',
+    empty: "Not much to combine yet. Pick a few more or tell me about it in the form.",
+    more: 'Show {n} more within reach',
+    less: 'Show less',
+    countNone: 'Pick your stack to see yours · {total} in total',
+    count: '{on} questions within reach · {rest} more if you connect other sources',
+    stackNone: '<b>Your stack:</b> pick what you use above.',
+    stack: '<b>Your stack:</b> {list}. You can answer {on} of {total} questions.',
+    cta: 'I want to answer this',
+    msgIntro: 'Hi Pablo. At our company we use {list}.',
+    msgWant: ' We would like to know {list}.',
+    msgEnd: ' Shall we talk?',
+    and: 'and',
+  },
+  how: {
+    h: 'How I work with you.',
+    steps: [
+      { h: 'Diagnosis', p: 'One call and one week to understand what data you have, where it lives and why it does not add up.' },
+      { h: 'Architecture', p: 'A concrete proposal with the estimated monthly cost before touching anything. No surprises on the cloud bill.' },
+      { h: 'Production', p: 'Pipelines with tests, documentation and alerts from the first deploy. What comes in, adds up.' },
+      { h: 'With you or your team', p: 'I stay on to maintain it as a freelancer, join you full-time or hand it over to your team, trained.' },
+    ],
+  },
+  contact: {
+    h: "Let's talk.",
+    p: 'Tell me what you use and what you would like to see. In 30 minutes I will tell you whether it can be fixed, how long it would take and what it would cost.',
+    copy: 'Copy',
+    copied: 'Email copied',
+    email: 'Your email',
+    emailPh: 'name@company.com',
+    msg: 'Message',
+    msgPh: "We use HubSpot and Holded and don't know the margin of each product…",
+    consent: 'I have read the <a href="{privacy}">privacy policy</a> and agree to you using this data to reply to me.',
+    send: 'Send',
+    sending: 'Sending…',
+    ok: 'Got it. I will reply within one working day.',
+    errEmail: 'Check the email address, something seems to be missing.',
+    errMsg: 'Write a message, even a short one.',
+    errConsent: 'Please accept the privacy policy so I can reply to you.',
+    errServer: 'It could not be sent. Write to me directly at {email}.',
+  },
+  footer: { role: 'Pablo Reina · data engineer', legal: 'Legal notice', privacy: 'Privacy' },
+  upload: 'Upload photo (development only)',
+  notImage: 'That file is not an image',
+};
+
+export const UI: Record<Locale, Dict> = { es, en };
+
+export const CONTACT_EMAIL = 'hola@pabloreina.com'; // TODO: confirmar el email real
+
+export function t(locale: Locale): Dict {
+  return UI[locale];
+}
+
+export function fmt(s: string, vars: Record<string, string | number>): string {
+  return s.replace(/\{(\w+)\}/g, (_, k: string) => String(vars[k] ?? `{${k}}`));
+}
+
+export function localeFrom(url: URL): Locale {
+  return url.pathname === '/en' || url.pathname.startsWith('/en/') ? 'en' : 'es';
+}

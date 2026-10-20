@@ -1,0 +1,101 @@
+---
+import { ROUTES, t } from '../i18n/ui';
+import type { Locale } from '../data/sources';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const d = t(locale);
+const home = ROUTES.home[locale];
+// Tema de cada capítulo: fondo de la escena y si el texto va claro sobre oscuro.
+const DARK = [false, false, true, true, false, false];
+const isDev = import.meta.env.DEV;
+---
+<nav class="rail" id="rail" aria-label={d.chaptersLabel}>
+  {d.chapters.map((c, i) => (
+    <button type="button" data-s={i}><span>{c}</span><i aria-hidden="true"></i></button>
+  ))}
+</nav>
+
+<section class="story" id="story" aria-label={d.story[0]!.h}>
+  <div class="stage" id="stage"><canvas id="gl" aria-hidden="true"></canvas></div>
+  <div class="panels">
+    {d.story.map((s, i) => (
+      <div class:list={['panel gut', { dark: DARK[i] }]} data-i={i}>
+        <div class="wrap">
+          <div class="ptext">
+            <span class="k mono">{s.k}</span>
+            {i === 0 ? <h1>{s.h}</h1> : <h2>{s.h}</h2>}
+            <p class="sub">{s.p}</p>
+            {i === 0 && (
+              <>
+                <div class="btns">
+                  <a class="btn btn-p" href={`${home}#contacto`}><span>{d.heroCtaPrimary}</span><span class="arr" aria-hidden="true">→</span></a>
+                  <a class="btn btn-g" href={`${home}#juego`}><span>{d.heroCtaSecondary}</span></a>
+                </div>
+                <span class="scrollhint mono"><i aria-hidden="true"></i>{d.scrollHint}</span>
+              </>
+            )}
+            {i === 5 && (
+              <div class="btns">
+                <a class="btn btn-p" href={`${home}#contacto`}><span>{d.writeMe}</span><span class="arr" aria-hidden="true">→</span></a>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
+{isDev && (
+  <label class="upl mono"><input class="sr-only" type="file" id="photo" accept="image/*" /><span>{d.upload}</span></label>
+)}
+
+<script>
+  import '../scripts/story';
+</script>
+
+<style>
+  .rail {
+    position: fixed; right: var(--gut-r); top: 50%; transform: translateY(-50%); z-index: 25;
+    display: flex; flex-direction: column; gap: 10px; transition: opacity 0.4s, color 0.4s;
+  }
+  .rail button {
+    all: unset; cursor: pointer; display: flex; align-items: center; gap: 10px; justify-content: flex-end;
+    font-family: var(--f-mono); font-size: 11px; opacity: 0.45; transition: opacity 0.2s;
+  }
+  .rail button:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+  .rail button i { display: block; width: 14px; height: 2px; background: currentColor; transition: width 0.3s var(--ease-out); }
+  .rail :global(button.on) { opacity: 1; }
+  .rail :global(button.on i) { width: 34px; }
+  :global(.rail.dark) { color: var(--cream); }
+  :global(.rail.off) { opacity: 0; pointer-events: none; }
+
+  .story { position: relative; }
+  .stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; background: var(--orange); }
+  .stage canvas { display: block; width: 100%; height: 100%; }
+  .panels { position: relative; margin-top: -100vh; margin-top: -100svh; z-index: 2; pointer-events: none; }
+  .panel { min-height: 100vh; min-height: 100svh; display: flex; align-items: center; padding-block: 120px 80px; }
+  .panel .wrap { width: 100%; }
+  .ptext { max-width: 600px; display: flex; flex-direction: column; gap: 22px; pointer-events: auto; will-change: opacity, transform; }
+  .panel h1 { font-size: clamp(3.4rem, 9.2vw, 9.4rem); }
+  .panel h2 { font-size: clamp(3rem, 7.4vw, 7.4rem); }
+  .sub { font-size: clamp(1.05rem, 1.4vw, 1.3rem); font-weight: 500; max-width: 42ch; }
+  .k { letter-spacing: 0.06em; }
+  .panel.dark { color: var(--cream); }
+  .scrollhint { display: flex; align-items: center; gap: 10px; }
+  .scrollhint i { display: block; width: 2px; height: 34px; background: currentColor; animation: sh 1.6s var(--ease-flow) infinite; transform-origin: top; }
+  @keyframes sh { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); } 100% { transform: scaleY(0); transform-origin: bottom; } }
+
+  .upl {
+    position: fixed; left: var(--gut-l); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 30;
+    display: inline-flex; gap: 8px; align-items: center; padding: 8px 12px;
+    background: var(--cream); color: var(--ink); border: 2px solid var(--ink); font-size: 11px; cursor: pointer;
+  }
+  .upl:focus-within { outline: 2px solid var(--ink); outline-offset: 3px; }
+
+  @media (max-width: 900px) {
+    .rail { display: none; }
+    .panel { align-items: flex-end; padding-block: 110px 64px; }
+    .ptext { max-width: none; padding-top: 40px; background: linear-gradient(transparent, var(--scrim, transparent) 22%); }
+  }
+</style>

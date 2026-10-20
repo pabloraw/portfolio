@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.astro/
+.vercel/
+.env
+.env.*
+!.env.example
+.DS_Store
+# Foto original del retrato: no se publica, solo los puntos generados
+assets/portrait/*
+!assets/portrait/.gitkeep

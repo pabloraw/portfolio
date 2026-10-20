@@ -1,0 +1,30 @@
+---
+import Base from './Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import type { RouteKey } from '../i18n/ui';
+import type { Locale } from '../data/sources';
+interface Props { locale: Locale; route: RouteKey; title: string; updated: string }
+const { locale, route, title, updated } = Astro.props;
+---
+<Base locale={locale} route={route} title={`${title} · Pablo Reina`}>
+  <Header locale={locale} route={route} solid />
+  <main id="main" class="gut">
+    <article class="wrap legal">
+      <h1>{title}</h1>
+      <p class="mono upd">{updated}</p>
+      <slot />
+      <Footer locale={locale} />
+    </article>
+  </main>
+</Base>
+<style>
+  .legal { max-width: 760px; padding-block: 64px 48px; }
+  h1 { font-size: clamp(3rem, 8vw, 6rem); margin-bottom: 12px; }
+  .upd { margin-bottom: 40px; color: var(--ink-2); }
+  .legal :global(h2) { font-size: clamp(1.8rem, 3.4vw, 2.6rem); margin: 40px 0 12px; }
+  .legal :global(p), .legal :global(li) { font-size: 17px; font-weight: 450; max-width: 65ch; }
+  .legal :global(p + p) { margin-top: 12px; }
+  .legal :global(ul) { padding-left: 20px; display: flex; flex-direction: column; gap: 6px; }
+  .legal :global(.todo) { background: var(--orange); padding: 0 4px; font-family: var(--f-mono); font-size: 0.85em; }
+</style>

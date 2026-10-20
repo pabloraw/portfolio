@@ -1,0 +1,43 @@
+---
+import { ROUTES, t } from '../i18n/ui';
+import type { Locale } from '../data/sources';
+interface Props { locale: Locale; route: keyof typeof ROUTES; solid?: boolean }
+const { locale, route, solid = false } = Astro.props;
+const d = t(locale);
+const other: Locale = locale === 'es' ? 'en' : 'es';
+---
+<header class:list={['hdr gut', { solid }]} id="hdr">
+  <div class="wrap">
+    <a class="logo" href={ROUTES.home[locale]}>Pablo Reina</a>
+    <nav class="hdr-r" aria-label="Principal">
+      <a class="lang mono" href={ROUTES[route][other]} hreflang={other} lang={other} aria-label={d.nav.langLabel}>{d.nav.lang}</a>
+      <a class="cta" href={`${ROUTES.home[locale]}#contacto`}><span>{d.nav.talk}</span></a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .hdr {
+    position: fixed; left: 0; right: 0; top: 0; z-index: 30;
+    padding-top: calc(14px + env(safe-area-inset-top, 0px)); padding-bottom: 14px;
+    transition: color 0.4s, background 0.3s, transform 0.35s var(--ease-out);
+  }
+  :global(.hdr.floating) { background: var(--cream); border-bottom: 2px solid var(--ink); }
+  :global(.hdr.floating.dark) { background: var(--ink); border-bottom-color: var(--cream-2); }
+  :global(.hdr.hide) { transform: translateY(-100%); }
+  .hdr.solid { position: sticky; background: var(--cream); border-bottom: 2px solid var(--ink); }
+  .wrap { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .logo { font-weight: 900; font-stretch: 62%; font-size: 26px; letter-spacing: -0.01em; text-decoration: none; }
+  .hdr-r { display: flex; align-items: center; gap: 16px; }
+  .lang { text-decoration: none; opacity: 0.8; }
+  .lang:hover { opacity: 1; text-decoration: underline; text-underline-offset: 4px; }
+  .cta {
+    display: inline-flex; gap: 8px; align-items: center; padding: 10px 18px;
+    border: 2px solid currentColor; font-weight: 700; font-size: 14px; text-decoration: none;
+    transition: background 0.2s;
+  }
+  .cta:hover { background: currentColor; }
+  .cta:hover span { color: var(--orange); }
+  :global(.hdr.dark) { color: var(--cream); }
+  :global(.hdr.dark) .cta:hover span { color: var(--ink); }
+</style>

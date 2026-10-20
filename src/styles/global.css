@@ -1,0 +1,98 @@
+/*
+  Sistema de diseño de pabloreina.com
+  Mundo visual: póster. Naranja, tinta y crema. Un único aspecto, deliberado (sin modo oscuro).
+  Tipografía: Archivo (variable en anchura y peso) + JetBrains Mono para datos.
+*/
+:root {
+  /* Color */
+  --orange: #ff6a3d;
+  --ink: #160f0b;
+  --cream: #fff3e6;
+  --ink-2: #5a2a16;   /* texto secundario sobre naranja o crema */
+  --cream-2: #bfb2a6; /* texto secundario sobre tinta, bordes apagados */
+  --line-c: #e6d6c6;  /* separadores sobre crema */
+
+  /* Tipo */
+  --f-display: 'Archivo Variable', 'Arial Narrow', Arial, sans-serif;
+  --f-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --stretch-display: 62%;
+  --stretch-strong: 70%;
+
+  /* Movimiento */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-flow: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* Gutter lateral, respeta safe areas */
+  --gut-l: max(16px, env(safe-area-inset-left, 0px));
+  --gut-r: max(16px, env(safe-area-inset-right, 0px));
+
+  color-scheme: light;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--f-display);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+h1, h2, h3, h4 {
+  margin: 0;
+  text-wrap: balance;
+  font-weight: 900;
+  font-stretch: var(--stretch-display);
+  letter-spacing: -0.015em;
+  line-height: 0.86;
+}
+p { margin: 0; }
+button, input, textarea { font: inherit; color: inherit; }
+a { color: inherit; }
+img { max-width: 100%; display: block; }
+:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+
+.mono { font-family: var(--f-mono); font-size: 12px; letter-spacing: 0.03em; }
+.gut { padding-left: var(--gut-l); padding-right: var(--gut-r); }
+.wrap { max-width: 1320px; margin: 0 auto; }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+.skip {
+  position: absolute; left: var(--gut-l); top: -60px; z-index: 100;
+  background: var(--ink); color: var(--cream); padding: 10px 14px; text-decoration: none;
+}
+.skip:focus { top: calc(10px + env(safe-area-inset-top, 0px)); }
+
+/* Botones */
+.btns { display: flex; gap: 10px; flex-wrap: wrap; }
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 16px 24px; font-weight: 700; font-size: 16px; text-decoration: none; cursor: pointer;
+  border: 2px solid var(--ink); background: transparent; color: var(--ink);
+  transition: transform 0.14s var(--ease-out), background 0.2s, color 0.2s;
+}
+.btn:active { transform: scale(0.97); }
+.btn .arr { transition: transform 0.28s var(--ease-out); }
+.btn:hover .arr { transform: translateX(5px); }
+.btn-p { background: var(--ink); color: var(--orange); }
+.btn-p:hover { background: var(--cream); color: var(--ink); }
+.btn-g:hover { background: var(--ink); color: var(--orange); }
+.btn[aria-disabled='true'] { opacity: 0.3; pointer-events: none; }
+
+.toast {
+  position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); z-index: 50;
+  transform: translate(-50%, 16px); opacity: 0; pointer-events: none;
+  background: var(--ink); color: var(--cream); padding: 10px 14px;
+  font-family: var(--f-mono); font-size: 12px;
+  transition: all 0.28s var(--ease-out);
+}
+.toast.on { opacity: 1; transform: translate(-50%, 0); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

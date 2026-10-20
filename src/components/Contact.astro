@@ -1,0 +1,61 @@
+---
+import { CONTACT_EMAIL, ROUTES, fmt, t } from '../i18n/ui';
+import type { Locale } from '../data/sources';
+import Footer from './Footer.astro';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const d = t(locale).contact;
+---
+<section class="end gut" id="contacto" aria-labelledby="contact-title">
+  <div class="wrap">
+    <h2 id="contact-title">{d.h}</h2>
+    <div class="grid">
+      <div class="intro">
+        <p>{d.p}</p>
+        <div class="mail mono"><span>{CONTACT_EMAIL}</span><button type="button" id="copymail">{d.copy}</button></div>
+      </div>
+      <form class="cf" id="cf" novalidate>
+        <label for="cemail">{d.email}</label>
+        <input id="cemail" name="email" type="email" required autocomplete="email" placeholder={d.emailPh} />
+        <label for="cmsg">{d.msg}</label>
+        <textarea id="cmsg" name="message" rows="5" required maxlength="4000" placeholder={d.msgPh}></textarea>
+        <div class="hp" aria-hidden="true"><label for="cweb">Web</label><input id="cweb" name="website" tabindex="-1" autocomplete="off" /></div>
+        <label class="consent" for="cconsent">
+          <input id="cconsent" name="consent" type="checkbox" required />
+          <span set:html={fmt(d.consent, { privacy: ROUTES.privacy[locale] })} />
+        </label>
+        <div class="btns"><button class="btn btn-p" type="submit" id="csend"><span>{d.send}</span><span class="arr" aria-hidden="true">→</span></button></div>
+        <p class="status mono" id="cfs" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+    <Footer locale={locale} />
+  </div>
+</section>
+
+<script>
+  import '../scripts/contact';
+</script>
+
+<style>
+  .end { background: var(--orange); padding-block: 100px 40px; }
+  h2 { font-size: clamp(5rem, 22vw, 20rem); line-height: 0.78; }
+  .grid { margin-top: 56px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 48px; align-items: start; }
+  .intro { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+  .intro p { font-size: 19px; font-weight: 500; max-width: 40ch; }
+  .mail { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font-size: 18px; }
+  .mail button { border: 2px solid var(--ink); background: transparent; padding: 6px 12px; font-family: var(--f-mono); font-size: 12px; cursor: pointer; }
+  .mail button:hover { background: var(--ink); color: var(--orange); }
+  .cf { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+  .cf > label:not(.consent) { font-size: 14px; font-weight: 700; margin-top: 6px; }
+  .cf input:not([type='checkbox']), .cf textarea {
+    background: var(--cream); border: 2px solid var(--ink); padding: 13px; font-size: 16px;
+    font-family: var(--f-display); font-stretch: 100%; resize: vertical; border-radius: 0;
+  }
+  .cf input:focus, .cf textarea:focus { outline: none; box-shadow: 5px 5px 0 var(--ink); }
+  .cf [aria-invalid='true'] { box-shadow: 5px 5px 0 var(--ink); border-style: dashed; }
+  .consent { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; font-weight: 500; margin-block: 8px; }
+  .consent input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--ink); flex: none; }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .status { min-height: 1.3em; }
+  @media (max-width: 900px) { .grid { grid-template-columns: minmax(0, 1fr); } }
+</style>

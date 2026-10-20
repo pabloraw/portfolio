@@ -1,0 +1,11 @@
+---
+import { SOURCES } from '../data/sources';
+const names = SOURCES.map((s) => s.name);
+---
+<div class="marquee" aria-hidden="true"><div>{[...names, ...names].map((n) => <span>{n}</span>)}</div></div>
+<style>
+  .marquee { background: var(--orange); color: var(--ink); overflow: hidden; padding-block: 18px; border-block: 2px solid var(--ink); }
+  .marquee div { display: flex; gap: 44px; width: max-content; animation: mq 40s linear infinite; font-weight: 900; font-stretch: 70%; font-size: clamp(28px, 4vw, 48px); }
+  .marquee span::after { content: '✳'; margin-left: 44px; font-size: 0.6em; vertical-align: middle; }
+  @keyframes mq { to { transform: translateX(-50%); } }
+</style>

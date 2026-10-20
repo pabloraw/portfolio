@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from './Header.astro';
+import Story from './Story.astro';
+import Play from './Play.astro';
+import HowIWork from './HowIWork.astro';
+import Marquee from './Marquee.astro';
+import Contact from './Contact.astro';
+import { CONTACT_EMAIL, ROUTES, t } from '../i18n/ui';
+import type { Locale } from '../data/sources';
+import type { PageData } from '../scripts/page-data';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const d = t(locale);
+const data: PageData = {
+  locale,
+  ui: { game: d.game, picker: d.picker, contact: d.contact, notImage: d.notImage },
+  privacyUrl: ROUTES.privacy[locale],
+  contactEmail: CONTACT_EMAIL,
+};
+---
+<Base locale={locale} route="home">
+  <script type="application/json" id="page-data" set:html={JSON.stringify(data)} />
+  <Header locale={locale} route="home" />
+  <main id="main">
+    <Story locale={locale} />
+    <Play locale={locale} />
+    <HowIWork locale={locale} />
+    <Marquee />
+    <Contact locale={locale} />
+  </main>
+</Base>

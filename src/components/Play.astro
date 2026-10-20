@@ -1,0 +1,151 @@
+---
+import { t } from '../i18n/ui';
+import type { Locale } from '../data/sources';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const d = t(locale);
+const g = d.game;
+---
+<section class="play gut" id="juego">
+  <div class="wrap">
+    <div class="head">
+      <h2>{g.h}</h2>
+      <p>{g.p}</p>
+    </div>
+
+    <div class="game">
+      <div class="field" id="field"></div>
+      <div class="tbl">
+        <div class="tbl-top"><b class="mono">{g.table}</b><span class="mono" id="tsync">{g.waiting}</span></div>
+        <div class="trow h mono">
+          <span>{g.cols[0]}</span><span class="c-type">{g.cols[1]}</span><span class="n">{g.cols[2]}</span><span class="ok">{g.cols[3]}</span>
+        </div>
+        <div class="tbody" id="tbody">
+          <div class="empty" id="empty"><b>{g.emptyTitle}</b><span>{g.emptyText}</span></div>
+        </div>
+        <div class="tfoot mono">
+          <span id="tcount">0/20 {g.sources}</span><span class="bar"><i id="tbar"></i></span><span id="trows">0 {g.rows}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="pick" id="pick">
+      <div class="pick-h"><h3>{d.picker.h}</h3><p>{d.picker.p}</p></div>
+      <div class="chips" id="chips" role="group" aria-label={d.picker.groupLabel}></div>
+    </div>
+    <div class="ins-h"><h3>{d.picker.insH}</h3><span class="mono" id="inscount"></span></div>
+    <div class="insights" id="insights"></div>
+    <div class="stackbar">
+      <p id="stacktxt"></p>
+      <a class="btn btn-p" href="#contacto" id="stackcta" aria-disabled="true"><span>{d.picker.cta}</span><span class="arr" aria-hidden="true">→</span></a>
+    </div>
+  </div>
+</section>
+
+<script>
+  import '../scripts/game';
+  import '../scripts/picker';
+</script>
+
+<style>
+  .play { background: var(--cream); padding-block: 110px 90px; }
+  .head, .pick-h { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 40px; align-items: end; }
+  .head { margin-bottom: 36px; }
+  .head h2 { font-size: clamp(3rem, 7vw, 6.8rem); }
+  .head p, .pick-h p { font-size: 18px; font-weight: 500; max-width: 44ch; }
+
+  .game { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); border: 2px solid var(--ink); }
+  .field {
+    position: relative; height: 460px; overflow: hidden; border-right: 2px solid var(--ink);
+    background: var(--orange) radial-gradient(rgba(22, 15, 11, 0.22) 1px, transparent 1px) 0 0 / 20px 20px;
+    touch-action: pan-y;
+  }
+  .field:global(.static) { height: auto; min-height: 300px; display: flex; flex-wrap: wrap; gap: 8px; align-content: flex-start; padding: 16px; }
+  .field :global(.src) {
+    position: absolute; left: 0; top: 0; display: flex; align-items: center; gap: 8px; padding: 8px 12px 8px 9px;
+    border: 2px solid var(--ink); background: var(--cream); cursor: pointer; white-space: nowrap;
+    will-change: transform; user-select: none; box-shadow: 4px 4px 0 var(--ink);
+  }
+  .field:global(.static) :global(.src) { position: static; }
+  :global(.src b) { font-size: 14px; font-weight: 700; }
+  :global(.src small) { font-family: var(--f-mono); font-size: 10px; color: var(--ink-2); }
+  :global(.src .ic) { width: 18px; height: 18px; display: grid; place-items: center; font-family: var(--f-mono); font-size: 10px; font-weight: 500; color: #fff; }
+  .field :global(.autohint) { position: absolute; right: 12px; top: 12px; font-family: var(--f-mono); font-size: 11px; background: var(--ink); color: var(--cream); padding: 5px 9px; pointer-events: none; z-index: 3; }
+  .field :global(.autohint.go) { background: var(--cream); color: var(--ink); border: 2px solid var(--ink); }
+  .field :global(.done-msg) { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 16px; padding: 32px; background: var(--orange); }
+  .field :global(.done-msg h3) { font-size: clamp(2rem, 4vw, 3.4rem); max-width: 16ch; }
+  .field :global(.done-msg p) { font-weight: 500; max-width: 42ch; }
+  :global(.float) { position: fixed; z-index: 45; pointer-events: none; font-family: var(--f-mono); font-size: 13px; font-weight: 500; color: var(--ink); white-space: nowrap; }
+  :global(.float b) { display: inline-block; margin-left: 6px; padding: 1px 6px; background: var(--ink); color: var(--orange); font-weight: 500; }
+
+  .tbl { display: flex; flex-direction: column; min-width: 0; height: 460px; }
+  .tbl-top { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 2px solid var(--ink); gap: 10px; }
+  .tbl-top b { font-size: 13px; font-weight: 500; }
+  .trow, .tbody :global(.trow) {
+    display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr) 44px; gap: 10px;
+    padding: 9px 16px; font-size: 14px; align-items: center; border-bottom: 1px solid var(--line-c);
+  }
+  .tbody :global(.trow span) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .trow.h { font-size: 11px; color: var(--ink-2); }
+  .tbody :global(.n), .trow .n { font-family: var(--f-mono); font-variant-numeric: tabular-nums; text-align: right; font-size: 12px; }
+  .tbody :global(.ok), .trow .ok { font-family: var(--f-mono); font-size: 11px; text-align: right; }
+  .tbody :global(.ok) { color: var(--orange); font-weight: 500; }
+  .tbody :global(.trow.new) { animation: rowin 0.9s var(--ease-out); }
+  @keyframes rowin { 0% { background: var(--orange); } 100% { background: transparent; } }
+  .tbody { flex: 1; overflow-y: auto; min-height: 0; }
+  .empty { padding: 28px 16px; font-size: 15px; display: flex; flex-direction: column; gap: 6px; color: var(--ink-2); }
+  .empty b { color: var(--ink); }
+  .tfoot { display: flex; justify-content: space-between; gap: 10px; padding: 12px 16px; border-top: 2px solid var(--ink); }
+  .bar { flex: 1; height: 8px; border: 1.5px solid var(--ink); align-self: center; max-width: 140px; }
+  .bar i { display: block; height: 100%; width: 0; background: var(--ink); transition: width 0.4s var(--ease-out); }
+
+  .pick { margin-top: 64px; display: flex; flex-direction: column; gap: 20px; }
+  .pick-h h3 { font-size: clamp(2.2rem, 4.6vw, 4.2rem); }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chips :global(.chip) {
+    display: inline-flex; gap: 9px; align-items: center; padding: 9px 13px; border: 2px solid var(--ink);
+    background: transparent; cursor: pointer; font-weight: 700; font-size: 15px;
+    transition: background 0.15s, color 0.15s, transform 0.14s var(--ease-out);
+  }
+  .chips :global(.chip:hover) { background: var(--orange); }
+  .chips :global(.chip:active) { transform: scale(0.96); }
+  .chips :global(.chip small) { font-family: var(--f-mono); font-size: 10px; font-weight: 400; color: var(--ink-2); }
+  .chips :global(.tick) { width: 15px; height: 15px; border: 2px solid currentColor; display: grid; place-items: center; font-size: 10px; line-height: 1; }
+  .chips :global(.chip[aria-pressed='true']) { background: var(--ink); color: var(--cream); }
+  .chips :global(.chip[aria-pressed='true'] small) { color: var(--cream-2); }
+
+  .ins-h { margin-top: 56px; display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+  .ins-h h3 { font-size: clamp(2rem, 4vw, 3.4rem); }
+  .insights { display: flex; flex-direction: column; gap: 14px; }
+  .insights :global(.ins-grid) { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  .insights :global(.ins) { min-width: 0; border: 2px dashed var(--cream-2); padding: 18px; display: flex; flex-direction: column; gap: 12px; }
+  .insights :global(.ins.on) { border: 2px solid var(--ink); background: var(--orange); }
+  .insights :global(.ins.fresh) { animation: unlock 0.5s var(--ease-out); }
+  @keyframes unlock { 0% { transform: scale(0.96); } 60% { transform: scale(1.02); } 100% { transform: none; } }
+  .insights :global(.tag), .insights :global(.via) { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.04em; }
+  .insights :global(.via) { margin-top: auto; }
+  .insights :global(.q) { font-size: clamp(22px, 2.2vw, 28px); font-weight: 900; font-stretch: 70%; line-height: 1.02; color: var(--ink-2); }
+  .insights :global(.ins.on .q) { color: var(--ink); }
+  .insights :global(.req) { display: flex; flex-wrap: wrap; gap: 6px; }
+  .insights :global(.req span) { font-family: var(--f-mono); font-size: 11px; padding: 3px 7px; border: 1px solid var(--cream-2); color: var(--ink-2); }
+  .insights :global(.req span.ok) { border-color: var(--ink); color: var(--ink); }
+  .insights :global(.ins-empty) { font-size: 17px; font-weight: 500; padding: 18px; border: 2px dashed var(--cream-2); }
+  .insights :global(.more) { align-self: flex-start; border: 2px solid var(--ink); background: transparent; padding: 10px 16px; font-weight: 700; cursor: pointer; }
+  .insights :global(.more:hover) { background: var(--ink); color: var(--cream); }
+
+  .stackbar { margin-top: 14px; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; padding: 14px 16px; border: 2px solid var(--ink); }
+  .stackbar p { font-size: 16px; font-weight: 500; min-width: 0; flex: 1 1 280px; }
+  .stackbar .btn { padding: 10px 18px; font-size: 14px; }
+
+  @media (max-width: 900px) {
+    .head, .pick-h { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+    .game { grid-template-columns: minmax(0, 1fr); }
+    .field { height: 380px; border-right: 0; border-bottom: 2px solid var(--ink); }
+    .tbl { height: 340px; }
+    .insights :global(.ins-grid) { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 520px) {
+    .trow, .tbody :global(.trow) { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) 44px; }
+    .c-type, .tbody :global(.c-type) { display: none; }
+  }
+</style>

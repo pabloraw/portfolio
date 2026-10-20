@@ -1,0 +1,20 @@
+---
+import { ROUTES, t } from '../i18n/ui';
+import type { Locale } from '../data/sources';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const d = t(locale);
+---
+<footer class="foot mono">
+  <span>{d.footer.role}</span>
+  <span class="links">
+    <a href={ROUTES.legal[locale]}>{d.footer.legal}</a>
+    <a href={ROUTES.privacy[locale]}>{d.footer.privacy}</a>
+    <span>© {new Date().getFullYear()}</span>
+  </span>
+</footer>
+<style>
+  .foot { margin-top: 80px; padding-top: 20px; border-top: 2px solid var(--ink); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .links { display: flex; gap: 16px; flex-wrap: wrap; }
+  a { text-underline-offset: 3px; }
+</style>

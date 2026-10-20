@@ -1,0 +1,59 @@
+---
+import '@fontsource-variable/archivo/wdth.css';
+import '@fontsource/jetbrains-mono/latin-400.css';
+import '@fontsource/jetbrains-mono/latin-500.css';
+import '../styles/global.css';
+import { ROUTES, t, type RouteKey } from '../i18n/ui';
+import type { Locale } from '../data/sources';
+
+interface Props {
+  locale: Locale;
+  route: RouteKey;
+  title?: string;
+  description?: string;
+}
+const { locale, route, title, description } = Astro.props;
+const d = t(locale);
+const site = Astro.site ?? new URL('https://pabloreina.com');
+const pageTitle = title ?? d.meta.title;
+const pageDesc = description ?? d.meta.description;
+const canonical = new URL(ROUTES[route][locale], site).href;
+const alt = (l: Locale) => new URL(ROUTES[route][l], site).href;
+const ogImage = new URL('/og.png', site).href;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Pablo Reina',
+  jobTitle: 'Data engineer',
+  url: site.href,
+  knowsAbout: ['Data engineering', 'ETL', 'Data pipelines', 'Data warehousing', 'Business intelligence'],
+};
+---
+<!doctype html>
+<html lang={d.meta.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDesc} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="es" href={alt('es')} />
+    <link rel="alternate" hreflang="en" href={alt('en')} />
+    <link rel="alternate" hreflang="x-default" href={alt('es')} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#ff6a3d" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDesc} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content={locale === 'es' ? 'es_ES' : 'en_US'} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body>
+    <a class="skip" href="#main">{d.nav.skip}</a>
+    <slot />
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>

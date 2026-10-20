@@ -1,0 +1,76 @@
+---
+import { t } from '../i18n/ui';
+import type { Locale } from '../data/sources';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const d = t(locale).how;
+---
+<section class="hz" id="como-trabajo" data-header-dark aria-labelledby="hz-title">
+  <div class="hz-pin" id="hzpin">
+    <ol class="hz-track" id="hztrack">
+      <li class="card intro"><h2 id="hz-title">{d.h}</h2></li>
+      {d.steps.map((s, i) => (
+        <li class:list={['card', { hot: i === d.steps.length - 1 }]}>
+          <span class="num" aria-hidden="true">{i + 1}</span>
+          <div><h3>{s.h}</h3><p>{s.p}</p></div>
+        </li>
+      ))}
+    </ol>
+    <div class="prog" aria-hidden="true"><i id="hzprog"></i></div>
+  </div>
+</section>
+
+<script>
+  import { gsap, reduceMotion } from '../scripts/scroll';
+  const pin = document.getElementById('hzpin');
+  const track = document.getElementById('hztrack');
+  const bar = document.getElementById('hzprog');
+  if (pin && track && bar) {
+    const mm = gsap.matchMedia();
+    // Carril horizontal anclado solo en pantallas anchas y sin "reducir movimiento".
+    mm.add('(min-width: 700px)', () => {
+      if (reduceMotion) return;
+      const dist = () => Math.max(0, track.scrollWidth - window.innerWidth);
+      gsap.to(track, {
+        x: () => -dist(),
+        ease: 'none',
+        scrollTrigger: {
+          trigger: pin, pin: true, scrub: true, invalidateOnRefresh: true,
+          end: () => `+=${dist()}`,
+          onUpdate: (self) => { bar.style.width = `${self.progress * 100}%`; },
+        },
+      });
+    });
+  }
+</script>
+
+<style>
+  .hz { background: var(--ink); color: var(--cream); }
+  .hz-pin { position: relative; min-height: 100vh; min-height: 100svh; display: flex; align-items: center; overflow: hidden; }
+  .hz-track {
+    list-style: none; margin: 0; display: flex; gap: 24px; will-change: transform;
+    padding: 120px var(--gut-r) 80px max(var(--gut-l), calc((100vw - 1320px) / 2));
+  }
+  .card {
+    flex: 0 0 min(78vw, 520px); min-height: min(66vh, 560px); border: 2px solid var(--cream);
+    padding: 28px; display: flex; flex-direction: column; justify-content: space-between; gap: 24px;
+  }
+  .intro { border: 0; padding-left: 0; flex-basis: min(82vw, 560px); justify-content: center; }
+  .intro h2 { font-size: clamp(3.4rem, 8vw, 7.6rem); color: var(--orange); }
+  .num { font-size: clamp(7rem, 16vw, 13rem); font-weight: 900; font-stretch: 62%; line-height: 0.8; color: transparent; -webkit-text-stroke: 2px var(--orange); }
+  h3 { font-size: clamp(2.2rem, 4vw, 3.4rem); line-height: 0.9; margin-bottom: 12px; }
+  p { font-size: 17px; font-weight: 500; color: var(--cream-2); max-width: 40ch; }
+  .hot { background: var(--orange); color: var(--ink); border-color: var(--orange); }
+  .hot .num { -webkit-text-stroke-color: var(--ink); }
+  .hot p { color: var(--ink-2); }
+  .prog { position: absolute; left: var(--gut-l); right: var(--gut-r); bottom: calc(28px + env(safe-area-inset-bottom, 0px)); height: 2px; background: #3a2c24; }
+  .prog i { display: block; height: 100%; width: 0; background: var(--orange); }
+
+  /* Sin carril horizontal: tarjetas apiladas */
+  @media (max-width: 699px), (prefers-reduced-motion: reduce) {
+    .hz-track { flex-direction: column; }
+    .card, .intro { flex-basis: auto; min-height: 0; }
+    .card .num { font-size: 6rem; }
+    .prog { display: none; }
+  }
+</style>

@@ -1,0 +1,22 @@
+---
+import Legal from '../../layouts/Legal.astro';
+import { CONTACT_EMAIL } from '../../i18n/ui';
+---
+<Legal locale="en" route="privacy" title="Privacy policy" updated="Last updated: October 2026">
+  <p><span class="todo">[Have this reviewed by a professional before publishing]</span></p>
+  <h2>Controller</h2>
+  <p>Pablo Reina <span class="todo">[full name, tax ID and address]</span>. Contact: {CONTACT_EMAIL}.</p>
+  <h2>What data I process and why</h2>
+  <p>Only what you send through the contact form: your email, your message and, if you pick them, the tools your company uses. I use it only to reply to you and prepare a possible proposal.</p>
+  <p>The tool picker and the game run in your browser and send nothing until you submit the form.</p>
+  <h2>Legal basis</h2>
+  <p>Your consent, given by ticking the box in the form (Art. 6.1.a GDPR). You can withdraw it at any time.</p>
+  <h2>How long I keep it</h2>
+  <p>For as long as the conversation lasts and at most 24 months after the last contact, unless there is a contract. <span class="todo">[confirm period]</span></p>
+  <h2>Who it is shared with</h2>
+  <p>With the providers that host the site and the data, acting as processors: Vercel (hosting) and Supabase (database)<span class="todo">[and Resend if email notifications are enabled; confirm regions and international transfers]</span>. I do not sell or share your data with third parties.</p>
+  <h2>Your rights</h2>
+  <p>You can request access, rectification, erasure, objection, restriction and portability by writing to {CONTACT_EMAIL}. You can also complain to the Spanish Data Protection Agency (aepd.es).</p>
+  <h2>Cookies</h2>
+  <p>This site does not use tracking cookies. <span class="todo">[update if analytics are added]</span></p>
+</Legal>
